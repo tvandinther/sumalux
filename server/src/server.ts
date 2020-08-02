@@ -17,8 +17,8 @@ mongoConnector.connect().then(startService);
 
 function startService() {
 	const lightController = new LightController(mongoConnector.getDb())
-	app.get('/api/light/*', (req, res) => lightController.req(req, res));
-	app.post('/api/light/*', (req, res) => lightController.req(req, res));
+	app.get('/api/light/*', (req, res) => lightController.get(req, res));
+	app.post('/api/light/*', (req, res) => lightController.post(req, res));
 
 	// Listen to the App Engine-specified port, or 8080 otherwise
 	const PORT = process.env.PORT || 8080;

@@ -23,7 +23,7 @@ export default class MongoConnector {
 	}
 
 	async connect(): Promise<MongoClient | void> {
-		return await MongoClient.connect(`mongodb://${this.host}:${this.port}`, { useUnifiedTopology: true })
+		return await MongoClient.connect(`mongodb://${this.host}:${this.port}`, { useUnifiedTopology: true, })
 			.then(client => {
 				this.connected = true;	
 				this.__client = client;

@@ -22,11 +22,18 @@ export class DashboardComponent implements OnInit {
 	}
 	
 	getYeelights(): void {
-		this.yeelightService.scan()
+		this.yeelightService.getAll()
 			.subscribe(yeelights => {
 				this.lights = yeelights;
 				console.log(this.lights);
 			});
+	}
+
+	scan(): void {
+		this.yeelightService.scan()
+			.subscribe(lights => {
+				this.lights = lights;
+			})
 	}
 
 }

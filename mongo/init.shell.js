@@ -4,9 +4,11 @@ db = conn.getDB('sumalux')
 /*
 	lights: Contains all light information.
 */
-lights = db.createCollection('lights', {
+db.createCollection('lights', {
 	autoIndexId: false, // ID becomes the IP address of the light as this must be unique
 })
+lights = db.getCollection('lights')
+lights.createIndex({ ip: 1 }, { unique: true })
 
 /*
 	users: Contains information of all system users.

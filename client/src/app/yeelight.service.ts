@@ -19,6 +19,10 @@ export class YeelightService {
 		private http: HttpClient
 	) { }
 	
+	getAll(): Observable<Yeelight[]> {
+		return this.http.get<Yeelight[]>(`${this.apiUrl}/get_all`);
+	}
+
 	scan(): Observable<Yeelight[]> {
 		return this.http.get<Yeelight[]>(`${this.apiUrl}/scan`);
 	}

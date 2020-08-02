@@ -35,16 +35,30 @@ export default class LightController {
 		}
 	}
 
-	req(req: Request, res: Response): void {
-		console.log("YES")
-		console.log(req.path)
+	get(req: Request, res: Response): void {
+		console.log("LIGHT REQUEST:", req.params)
 
-		switch (req.path) {
-			case '/api/light/scan': {
-				this.discover();
+		switch (req.params[0]) {
+			case 'get_all': {
+				this.getAllLights().then(data => res.send(data));
+				break;
+			}
+			case 'scan': {
+				this.discover().then(data => res.send(data));
+				break;
 			}
 			default: {
-				// return code 400
+				res.status(400).send();
+				break;
+			}
+		}
+	}
+
+	post(req: Request, res: Response): void {
+		const data = req.body;
+		switch (req.params[0]) {
+			case 'command': {
+				this.command(data.target, data.method, data.parameters);
 			}
 		}
 	}
@@ -53,15 +67,19 @@ export default class LightController {
 		return Object.entries(this.vendorControllers);
 	}
 
-	discover(): void {
+	async getAllLights(): Promise<Light[]> {
+		return await this.lightsDb.getAllLights();
+	}
+
+	async discover(): Promise<Light[]> {
 		let vendorLightMap: {[key: string]: Promise<Light[]>} = {};
 
 		for (let [vendor, vendorController] of this.__allVendors) {
 			vendorController.discover().then(lights => {
-				this.lightsDb.addLights(lights)
+				this.lightsDb.addLights(lights);
 			});
 		}
-
+		return await this.lightsDb.getAllLights();
 	}
 
 	command(target_ip, method, parameters): Promise<any> {

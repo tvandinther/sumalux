@@ -6,7 +6,8 @@
   "scripts": {
 		"client": "cd client && ng serve --open",
 		"server": "cd server && npm run start:watch",
-    "start": "concurrently \"npm run client\" \"npm run server\" \"docker-compose up\""
+		"mongo": "cd mongo && docker start mongo_mongo_1",
+    "start": "concurrently \"npm run client\" \"npm run server\" \"npm run mongo\""
   },
   "author": "",
   "license": "ISC",
