@@ -1,0 +1,18 @@
+{
+  "name": "sumalux",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+		"client": "cd client && ng serve --open",
+		"server": "cd server && npm run start:watch",
+    "start": "concurrently \"npm run client\" \"npm run server\" \"docker-compose up\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+	},
+	"devDependencies": {
+		"concurrently": "^5.0.2"
+	}
+}

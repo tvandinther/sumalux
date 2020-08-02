@@ -10,7 +10,7 @@ import { Yeelight, Method } from './yeelight'
 })
 export class YeelightService {
 
-	private apiUrl = '/api/yeelight';
+	private apiUrl = '/api/light';
 	private httpOptions = {
 		headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 	};

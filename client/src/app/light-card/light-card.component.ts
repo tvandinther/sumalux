@@ -15,6 +15,7 @@ export class LightCardComponent implements OnInit {
 	ext_state: {
 		brightness: number,
 		rgb: number,
+		rgbHexString?: string,
 		hue: number,
 		sat: number,
 	}
@@ -26,7 +27,7 @@ export class LightCardComponent implements OnInit {
   ngOnInit(): void { 
 		console.log(this.light);
 		this.ext_state = this.light.state;
-		this.ext_state.rgb = this.rgbToHex(this.ext_state.rgb);
+		this.ext_state.rgbHexString = this.rgbToHex(this.ext_state.rgb);
 	}
 
 	toggle(): void {
@@ -86,7 +87,7 @@ export class LightCardComponent implements OnInit {
     return [r, g, b];
 	}
 
-	rgbToHex(rgb) {
+	rgbToHex(rgb: number) {
 		let r = rgb >> 16 & 255;
 		let g = rgb >> 8 & 255;
 		let b = rgb & 255;
