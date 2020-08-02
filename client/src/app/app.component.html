@@ -1,0 +1,12 @@
+<mat-toolbar class="toolbar">
+	<button mat-icon-button type="button" mat-button (click)="drawer.toggle()">
+		<mat-icon>menu</mat-icon>
+	</button>
+	<span class="toolbar-title">My Application</span>
+</mat-toolbar>
+<mat-drawer-container class="app-container" hasBackdrop>
+	<mat-drawer class="drawer" #drawer mode="side">
+		Sidebar
+	</mat-drawer>
+	<router-outlet></router-outlet>
+</mat-drawer-container>

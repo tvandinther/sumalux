@@ -1,0 +1,29 @@
+<mat-card>
+	<mat-card-title>
+		{{light.name}}
+	</mat-card-title>
+	<mat-card-subtitle>
+		{{light.model | uppercase}}
+	</mat-card-subtitle>
+	<img src="/assets/img/light_{{light.model}}.png">
+	<p *ngIf="light.error">{{light.error | json}}</p>
+	<mat-card-actions class="actions">
+		<input 
+			matInput
+			type="color"
+			[(ngModel)]="ext_state.rgb"
+			(change)="this.setRGB()"
+		>
+		<mat-slide-toggle
+			[(ngModel)]="light.state.on"
+			(click)="this.toggle()">
+		</mat-slide-toggle>
+		<mat-slider
+			min="1"
+			max="100"
+			thumbLabel
+			[(ngModel)]="ext_state.brightness"
+			(change)="this.setBrightness()"
+		></mat-slider>
+	</mat-card-actions>
+</mat-card>
