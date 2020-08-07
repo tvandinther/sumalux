@@ -3,7 +3,7 @@ import suncalc from 'suncalc';
 import { Light } from './light';
 import vendorControllers from "./vendor-controllers"
 import { VendorController } from './vendor-controllers/VendorController';
-import { MongoConnector, LightsConnector } from "../mongo-connector";
+import { LightsModel } from "../mongo-connector";
 import { Db } from "mongodb";
 
 const LIGHT_PROPS = [
@@ -23,12 +23,12 @@ interface VendorControllers {
 export default class LightController {
 	
 	vendorControllers: VendorControllers;
-	lightsDb: LightsConnector;
+	lightsDb: LightsModel;
 
 	constructor(
 		database: Db
 	) {
-		this.lightsDb = new LightsConnector(database);
+		this.lightsDb = new LightsModel(database);
 		this.vendorControllers = {};
 		for (let [name, vendorController] of Object.entries(vendorControllers)) {
 			this.vendorControllers[name] = new vendorController();

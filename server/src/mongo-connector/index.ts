@@ -1,7 +1,7 @@
 import MongoConnector from "./mongo.connector";
-import LightsConnector from "./lights.connector";
+import LightsModel from "./lights.model";
 
 export {
 	MongoConnector,
-	LightsConnector,
+	LightsModel,
 }

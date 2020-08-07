@@ -2,7 +2,7 @@ import { Db, Collection } from "mongodb";
 import { Light } from "../lights/light";
 import { LightGroup } from "../lights/lightGroup";
 
-export default class LightsConnector {
+export default class LightsModel {
 
 	database: Db;
 	lights: Collection;

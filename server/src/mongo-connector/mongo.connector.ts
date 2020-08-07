@@ -1,12 +1,4 @@
 import { MongoClient, Db } from "mongodb";
-import { isNull } from "util";
-import { threadId } from "worker_threads";
-import * as lightsMongo from "./lights.connector";
-import { config } from "process";
-
-const HOST = 'localhost';
-const PORT = 27017;
-const DATABASE = 'sumalux';
 
 export default class MongoConnector {
 	connected: boolean;
