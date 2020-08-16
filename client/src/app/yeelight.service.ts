@@ -35,8 +35,8 @@ export class YeelightService {
 		}, this.httpOptions);
 
 		return source.pipe(map(res => {
-			if (res['result']) return res['result']
-			else if (res['error']) throw(res['error']['message'])
+			if (res.success) return res
+			else if (!res.success) throw(res)
 		}))
 	}
 }

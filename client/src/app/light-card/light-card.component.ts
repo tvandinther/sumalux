@@ -32,7 +32,7 @@ export class LightCardComponent implements OnInit {
 
 	toggle(): void {
 		const prev_state = this.light.state.on;
-		this.yeelightService.command(this.light, "set_power", { power: prev_state ? "off" : "on" })
+		this.yeelightService.command(this.light, "set_power", { power: !prev_state })
 			.subscribe(
 				(data: string[]) => {
 				console.log(data);

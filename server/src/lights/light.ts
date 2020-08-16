@@ -5,3 +5,7 @@ export interface Light {
 	name: string,
 	owner: string, // User ID
 }
+
+export interface LightState {
+	[key: string]: any,
+}

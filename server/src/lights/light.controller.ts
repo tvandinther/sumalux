@@ -5,6 +5,7 @@ import vendorControllers from "./vendor-controllers"
 import { VendorController } from './vendor-controllers/VendorController';
 import { LightsModel } from "../mongo-connector";
 import { Db } from "mongodb";
+import { LightResponse } from './vendor-controllers/LightResponse';
 
 const LIGHT_PROPS = [
 	'power',
@@ -16,13 +17,9 @@ const LIGHT_PROPS = [
 	'sat'
 ]
 
-interface VendorControllers {
-	[key: string]: VendorController;
-}
-
 export default class LightController {
 	
-	vendorControllers: VendorControllers;
+	vendorControllers: { [key: string]: VendorController };
 	lightsDb: LightsModel;
 
 	constructor(
@@ -35,16 +32,18 @@ export default class LightController {
 		}
 	}
 
-	get(req: Request, res: Response): void {
+	async get(req: Request, res: Response): Promise<void> {
 		console.log("LIGHT REQUEST:", req.params)
 
 		switch (req.params[0]) {
 			case 'get_all': {
-				this.getAllLights().then(data => res.send(data));
+				let data = await this.getAllLights();
+				res.send(data)
 				break;
 			}
 			case 'scan': {
-				this.discover().then(data => res.send(data));
+				let data = await this.discover();
+				res.send(data);
 				break;
 			}
 			default: {
@@ -54,11 +53,15 @@ export default class LightController {
 		}
 	}
 
-	post(req: Request, res: Response): void {
-		const data = req.body;
+	async post(req: Request, res: Response): Promise<void> {
+		const body = req.body;
+		//console.log("LIGHT REQUEST:", req.params, data)
 		switch (req.params[0]) {
 			case 'command': {
-				this.command(data.target, data.method, data.parameters);
+				let data = await this.command(body.target, body.method, body.parameters);
+				res.send(data);
+				this.lightsDb.updateLightState(body.target, data.state);
+				break;
 			}
 		}
 	}
@@ -76,27 +79,28 @@ export default class LightController {
 
 		for (let [vendor, vendorController] of this.__allVendors) {
 			vendorController.discover().then(lights => {
-				this.lightsDb.addLights(lights);
+				this.lightsDb.addLights(lights, vendor);
 			});
 		}
 		return await this.lightsDb.getAllLights();
 	}
 
-	command(target_ip, method, parameters): Promise<any> {
-		let light;
+	async command(targetId, method, parameters): Promise<LightResponse> {
+		let light = await this.lightsDb.getLight(targetId);
+		let vendorController = this.vendorControllers[light.vendor]
 
 		switch(method) {
 			case "toggle": {
-				return light.toggle();
+				return vendorController.toggle(light);
 			}
 			case "set_power": {
-				return light.set_power(parameters.power);
+				return await vendorController.setPower(light, parameters.power);
 			}
 			case "set_brightness": {
-				return light.set_bright(parameters.brightness);
+				return vendorController.setBrightness(light, parameters.brightness);
 			}
 			case "set_rgb": {
-				return light.set_rgb(parameters.rgb);
+				return vendorController.setRGB(light, parameters.rgb);
 			}
 			default: {
 				return Promise.reject("Invalid method");
