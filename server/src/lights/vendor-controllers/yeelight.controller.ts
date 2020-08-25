@@ -3,45 +3,6 @@ import { VendorController } from './VendorController';
 import { LightResponse } from './LightResponse';
 import { Yeelight } from '../yeelight.light';
 
-function yeelightCommand(argMap: {[key: string]: number}) {
-	return function (target: YeelightController, propertyKey: string, descriptor: PropertyDescriptor) {
-		let originalMethod = descriptor.value;
-		descriptor.value = async function (...args: any[]): Promise<LightResponse> {
-			let light: Yeelight = args[0] // arg[0] contains the light
-			args[0] = target.__getBinding.call(this, light);
-			
-			// This function converts argument indices into values and maps them to the state object
-			const mapArgState = (map: {[key: string]: number}) => {
-				let result = {};
-				for (let [prop, argIndex] of Object.entries(map)) {
-					result[prop] = args[argIndex];
-				}
-				return result;
-			}
-
-			try {
-				let response = JSON.parse(await originalMethod.apply(this, args));
-				if (response.result) {
-					return {
-						success: true,
-						state: {
-							...light.state,
-							...mapArgState(argMap),
-						}
-					}
-				}
-				// If response does not include "result", an error was returned as per Yeelight API Documentation
-				else throw(Error)
-			} catch (error) {
-				return {
-					success: false,
-					state: light.state,
-				}
-			}
-		}
-	}
-}
-
 export default class YeelightController implements VendorController {
 
 	client: Client;
@@ -92,5 +53,47 @@ export default class YeelightController implements VendorController {
 
 	setRGB(light: YeelightBind): any {
 
+	}
+}
+
+/*
+	Decorator function
+*/
+function yeelightCommand(argMap: {[key: string]: number}) {
+	return function (target: YeelightController, propertyKey: string, descriptor: PropertyDescriptor) {
+		let originalMethod = descriptor.value;
+		descriptor.value = async function (...args: any[]): Promise<LightResponse> {
+			let light: Yeelight = args[0] // arg[0] contains the light
+			args[0] = target.__getBinding.call(this, light);
+			
+			// This function converts argument indices into values and maps them to the state object
+			const mapArgState = (map: {[key: string]: number}) => {
+				let result = {};
+				for (let [prop, argIndex] of Object.entries(map)) {
+					result[prop] = args[argIndex];
+				}
+				return result;
+			}
+
+			try {
+				let response = JSON.parse(await originalMethod.apply(this, args));
+				if (response.result) {
+					return {
+						success: true,
+						state: {
+							...light.state,
+							...mapArgState(argMap),
+						}
+					}
+				}
+				// If response does not include "result", an error was returned as per Yeelight API Documentation
+				else throw(Error)
+			} catch (error) {
+				return {
+					success: false,
+					state: light.state,
+				}
+			}
+		}
 	}
 }

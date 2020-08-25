@@ -4,6 +4,7 @@ export default class MongoConnector {
 	connected: boolean;
 	host: string;
 	port: number;
+	error: any;
 	private __client: MongoClient;
 	private __dbName: string;
 	private __db: Db;
@@ -24,6 +25,8 @@ export default class MongoConnector {
 			})
 			.catch(err => {
 				this.connected = false;
+				this.error = err;
+				throw err;
 			})
 	}
 
