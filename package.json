@@ -7,7 +7,8 @@
 		"client": "cd client && ng serve --open",
 		"server": "cd server && npm run start:watch",
 		"mongo": "cd mongo && docker start mongo_mongo_1",
-    "start": "concurrently \"npm run client\" \"npm run server\" \"npm run mongo\""
+		"redis": "docker start sumalux-redis",
+    "start": "concurrently \"npm run client\" \"npm run server\" \"npm run redis\""
   },
   "author": "",
   "license": "ISC",
