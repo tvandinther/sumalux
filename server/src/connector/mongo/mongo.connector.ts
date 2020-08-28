@@ -1,9 +1,13 @@
 import { MongoClient, Db } from "mongodb";
+import ServiceConnector from "../serviceConnector";
+import LightsModel from "../lights.model";
+import MongoLightsModel from "./mongo.lights.model";
 
-export default class MongoConnector {
+export default class MongoConnector implements ServiceConnector{
 	connected: boolean;
 	host: string;
 	port: number;
+	lightsModel: LightsModel;
 	private __client: MongoClient;
 	private __dbName: string;
 	private __db: Db;
@@ -19,7 +23,7 @@ export default class MongoConnector {
 			.then(client => {
 				this.connected = true;	
 				this.__client = client;
-				this.__db = this.__client.db(this.__dbName);
+				this.lightsModel = new MongoLightsModel(this.__client.db(this.__dbName));
 				return client;
 			})
 			.catch(err => {

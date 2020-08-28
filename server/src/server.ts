@@ -1,22 +1,24 @@
 import * as express from 'express';
 import suncalc from 'suncalc';
 
-import { MongoConnector } from "./mongo-connector";
+import { Connector } from "./connector";
 import LightController from './lights';
+import { env } from 'process';
 
 const app: express.Application = express();
 
 app.use(express.json());
 app.use(express.static('client'));
 
-const mongoConnector: MongoConnector = new MongoConnector({
-	host: 'localhost',
-	dbName: 'sumalux',
+const connector: Connector = new Connector({
+	service: "redis",
+	host: "sumalux-redis",
+	port: 6379,
 })
-mongoConnector.connect().then(startService);
+connector.connect().then(startService);
 
 function startService() {
-	const lightController = new LightController(mongoConnector.getDb())
+	const lightController = new LightController(connector);
 	app.get('/api/light/*', (req, res) => lightController.get(req, res));
 	app.post('/api/light/*', (req, res) => lightController.post(req, res));
 
