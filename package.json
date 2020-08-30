@@ -7,7 +7,7 @@
 		"client": "docker start sumalux-ng",
 		"server": "docker start sumalux-express",
 		"redis": "docker start sumalux-redis",
-		"start": "docker-compose -f docker-compose.dev.yaml up",
+		"start": "docker-compose -f docker-compose.dev.yaml up"
   },
   "author": "",
   "license": "ISC",
