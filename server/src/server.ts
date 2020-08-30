@@ -12,7 +12,7 @@ app.use(express.static('client'));
 
 const connector: Connector = new Connector({
 	service: "redis",
-	host: "sumalux-redis",
+	host: "localhost",
 	port: 6379,
 })
 connector.connect().then(startService);

@@ -23,13 +23,12 @@ export default class MongoLightsModel implements LightsModel {
 			this.__lights.updateOne({_id: light.ip}, {
 				$set: {
 					_id: light.ip,
-					vendor: vendor,
 					...light,
+					vendor: vendor,
 				}
 			}, { upsert: true })
 
 			// ADD LIGHT GROUPS
-			// TO DO
 			this.__lightGroups.updateOne({lights: [light.ip]}, {
 				$set: {
 					soloGroup: true,

@@ -1,5 +1,8 @@
 const Redis = require("ioredis")
 
+const { Yeelight } = require('yeelight-node-binding');
+const { Client } = require('yeelight-node-binding');
+
 const redis = new Redis({
 	port: 6379, // Redis port
 	host: "sumalux-redis", // Redis host
@@ -9,6 +12,21 @@ const redis = new Redis({
 	lazyConnect: true,
 });
 
+const client = new Client();
+client.bind();
+
+function scan() {
+	return new Promise((resolve, reject) => {
+			var lights = {};
+
+			client.search();
+			console.log("Searching for lights...")
+			function returnFunc() {
+					resolve(client.lights);
+			}
+			setTimeout(returnFunc, 1000);
+	})
+}
 
 async function test() {
 	let connection = await redis.connect()
@@ -18,4 +36,4 @@ async function test() {
 	// console.log(result)
 }
 
-test()
+scan().then(result => console.log(result))

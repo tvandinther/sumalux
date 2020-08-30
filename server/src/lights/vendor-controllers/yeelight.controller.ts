@@ -65,7 +65,9 @@ export default class YeelightController implements VendorController {
 
 			setTimeout((): void => {
 				// this.lights = new Map(this.client.lights.map<YeelightBind>(light => [light.ip, light]));
-				this.client.lights.array.forEach(light => this.lights.set(light.ip, light));
+				if (this.client.lights.array?.length > 0) {
+					this.client.lights.array.forEach(light => this.lights.set(light.ip, light));
+				}
 				resolve(this.client.lights);
 			}, this.discoveryTimeout); // allow time for lights to respond
 		})
