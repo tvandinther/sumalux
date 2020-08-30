@@ -9,7 +9,7 @@ import { env } from 'process';
 const app: express.Application = express();
 
 app.use(express.json());
-app.use(express.static(path.resolve(__dirname, '../../client/dist/sumalux')));
+app.use(express.static(path.resolve(__dirname, '../../client/dist/simulux')));
 
 const connector: Connector = new Connector({
 	service: "redis",

@@ -1,5 +1,5 @@
 conn = new Mongo()
-db = conn.getDB('sumalux')
+db = conn.getDB('simulux')
 
 /*
 	lights: Contains all light information.

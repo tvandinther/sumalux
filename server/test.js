@@ -5,7 +5,7 @@ const { Client } = require('yeelight-node-binding');
 
 const redis = new Redis({
 	port: 6379, // Redis port
-	host: "sumalux-redis", // Redis host
+	host: "simulux-redis", // Redis host
 	family: 4, // 4 (IPv4) or 6 (IPv6)
 	password: "",
 	db: 0,

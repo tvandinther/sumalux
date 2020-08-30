@@ -22,7 +22,7 @@ export default class Connector {
 				this.__serviceConnector = new MongoConnector({
 					host: this.host,
 					port: this.port,
-					dbName: "sumalux",
+					dbName: "simulux",
 				})
 				break;
 			}
