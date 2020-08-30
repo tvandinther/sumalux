@@ -1,0 +1,34 @@
+version: "3.1"
+
+services:
+  # angular:
+  #   build: ./client
+  #   container_name: sumalux-ng
+  #   ports: 
+  #     - "4200:4200"
+  #   volumes: 
+  #     - ./client:/var/lib/app
+  #   working_dir: /var/lib/app
+  #   command: ["ng", "serve", "--host", "0.0.0.0"]
+
+  # express:
+  #   image: node:12
+  #   container_name: sumalux-express
+  #   environment: 
+  #     - PORT=8080
+  #   ports: 
+  #     - "8080:8080"
+  #     - "1982:1982/udp" # Yeelight discovery port
+  #   sysctls: 
+  #     - net.ipv4.conf.all.forwarding=1
+  #     - net.ipv4.ip_forward=1
+  #   volumes: 
+  #     - ./server:/var/lib/server
+  #   working_dir: /var/lib/server
+  #   command: ["npm", "run", "start:watch"]
+
+  redis:
+    image: redis
+    container_name: sumalux-redis
+    ports: 
+      - "6379:6379"

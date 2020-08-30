@@ -2,17 +2,17 @@
   "name": "sumalux",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "",
   "scripts": {
-    "client": "cd client && ng serve --open",
-    "server": "cd server && npm run start:watch",
-    "mongo": "cd mongo && docker start mongo_mongo_1",
-    "start": "concurrently \"npm run client\" \"npm run server\" \"npm run mongo\""
+		"client": "docker start sumalux-ng",
+		"server": "docker start sumalux-express",
+		"redis": "docker start sumalux-redis",
+		"start": "docker-compose -f docker-compose.dev.yaml up"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {},
-  "devDependencies": {
-    "concurrently": "^5.0.2"
-  }
+  "dependencies": {
+	},
+	"devDependencies": {
+	}
 }

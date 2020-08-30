@@ -3,9 +3,11 @@ import suncalc from 'suncalc';
 import { Light } from './light';
 import vendorControllers from "./vendor-controllers"
 import { VendorController } from './vendor-controllers/VendorController';
-import { LightsModel } from "../mongo-connector";
+import LightsModel from "../connector/lights.model";
 import { Db } from "mongodb";
+import { Redis } from "ioredis"
 import { LightResponse } from './vendor-controllers/LightResponse';
+import ServiceConnector from '../connector/serviceConnector';
 
 const LIGHT_PROPS = [
 	'power',
@@ -20,12 +22,12 @@ const LIGHT_PROPS = [
 export default class LightController {
 	
 	vendorControllers: { [key: string]: VendorController };
-	lightsDb: LightsModel;
+	private __lightsModel: LightsModel;
 
 	constructor(
-		database: Db
+		connector: ServiceConnector
 	) {
-		this.lightsDb = new LightsModel(database);
+		this.__lightsModel = connector.lightsModel;
 		this.vendorControllers = {};
 		for (let [name, vendorController] of Object.entries(vendorControllers)) {
 			this.vendorControllers[name] = new vendorController();
@@ -60,7 +62,7 @@ export default class LightController {
 			case 'command': {
 				let data = await this.command(body.target, body.method, body.parameters);
 				res.send(data);
-				this.lightsDb.updateLightState(body.target, data.state);
+				this.__lightsModel.updateLightState(body.target, data.state);
 				break;
 			}
 		}
@@ -71,7 +73,7 @@ export default class LightController {
 	}
 
 	async getAllLights(): Promise<Light[]> {
-		return await this.lightsDb.getAllLights();
+		return await this.__lightsModel.getAllLights();
 	}
 
 	async discover(): Promise<Light[]> {
@@ -79,14 +81,14 @@ export default class LightController {
 
 		for (let [vendor, vendorController] of this.__allVendors) {
 			vendorController.discover().then(lights => {
-				this.lightsDb.addLights(lights, vendor);
+				this.__lightsModel.addLights(lights, vendor);
 			});
 		}
-		return await this.lightsDb.getAllLights();
+		return await this.__lightsModel.getAllLights();
 	}
 
 	async command(targetId, method, parameters): Promise<LightResponse> {
-		let light = await this.lightsDb.getLight(targetId);
+		let light = await this.__lightsModel.getLight(targetId);
 		let vendorController = this.vendorControllers[light.vendor]
 
 		switch(method) {

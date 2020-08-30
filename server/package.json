@@ -13,6 +13,7 @@
 		"dependencies": {
 				"@types/express": "^4.17.7",
 				"express": "^4.17.1",
+				"ioredis": "^4.17.3",
 				"mongodb": "^3.6.0",
 				"suncalc": "^1.8.0",
 				"yeelight-node-binding": "^1.1.1"
@@ -31,6 +32,7 @@
 				"ext": "ts"
 		},
 		"devDependencies": {
+				"@types/ioredis": "^4.17.3",
 				"@types/mongodb": "^3.5.25",
 				"@types/node": "^14.0.27",
 				"eslint": "^7.6.0",
