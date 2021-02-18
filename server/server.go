@@ -11,8 +11,8 @@ import (
 	"time"
 )
 
-const PORT = 8081
-const API_PREFIX = "/api"
+const port = 8081
+const apiPrefix = "/api"
 
 type spaHandler struct {
 	staticPath string
@@ -45,14 +45,14 @@ func Start() {
 
 	router := mux.NewRouter().StrictSlash(true)
 
-	router.PathPrefix(API_PREFIX).Handler(api.Router(API_PREFIX))
+	router.PathPrefix(apiPrefix).Handler(api.Router(apiPrefix))
 
 	router.PathPrefix("/").Handler(spaHandler{
 		staticPath: "./client/dist/simulux",
 		indexPath: "index.html",
 	})
 
-	addr := fmt.Sprintf(":%d", PORT)
+	addr := fmt.Sprintf(":%d", port)
 
 	fmt.Printf("Server listening on %s...\n", addr)
 	server := &http.Server{
